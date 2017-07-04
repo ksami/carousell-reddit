@@ -1,0 +1,25 @@
+{
+  "name": "carousell-reddit",
+  "version": "0.0.1",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node bin/index",
+    "test": "mocha test"
+  },
+  "author": "ksami",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.3.0",
+    "typescript": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.39",
+    "@types/node": "^8.0.7",
+    "mocha": "^3.4.2"
+  },
+  "engines": {
+    "node": "7.10.0"
+  }
+}
