@@ -1,0 +1,213 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Clone of Digg/Reddit where users can upvote/downvote topics",
+    "version": "1.0.0",
+    "title": "Digg/Reddit clone with upvote and downvotes"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "topic",
+      "description": "A user-submitted topic"
+    },
+    {
+      "name": "user",
+      "description": "Operations about user"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/topics": {
+      "get": {
+        "tags": [
+          "topic"
+        ],
+        "summary": "Get top 20 topics",
+        "operationId": "getTopics",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of top 20 topics sorted in descending order by upvotes",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Topic"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "topic"
+        ],
+        "summary": "Creates a new topic",
+        "operationId": "createNewTopic",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "topic",
+            "description": "Topic to be added",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": [
+                "text",
+                "username"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "maxLength": 255
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "examples": {
+              "application/json": {
+                "success": true,
+                "message": "Topic successfully created",
+                "id": "abc123"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "examples": {
+              "application/json": {
+                "success": false,
+                "message": "Missing parameters"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/topics/{id}": {
+      "put": {
+        "tags": [
+          "topic"
+        ],
+        "summary": "Upvote/downvote this topic",
+        "description": "",
+        "operationId": "voteTopic",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID of topic to upvote/downvote",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "description": "Action to be taken for this topic",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "upvote",
+                    "downvote"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully upvoted/downvoted",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "examples": {
+              "application/json": {
+                "success": false,
+                "message": "ID does not exist"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Topic": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "upvotes": {
+          "type": "integer"
+        },
+        "downvotes": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "author": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Topic"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "required": [
+        "success",
+        "message"
+      ],
+      "properties": {
+        "topic": {
+          "$ref": "#/definitions/Topic"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
