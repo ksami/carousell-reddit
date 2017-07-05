@@ -4,7 +4,7 @@
   "description": "",
   "main": "bin/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp -r src/docs bin",
     "start": "npm run build && node bin/index",
     "test": "mocha test"
   },

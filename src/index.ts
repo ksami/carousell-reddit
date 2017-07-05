@@ -5,44 +5,28 @@
 
 import * as path from "path";
 import * as Koa from "koa";
-import * as Router from "koa-router";
 import * as bodyParser from "koa-bodyparser";
 import * as swagger from "swagger2";
 import {ui as swaggerUi, validate} from "swagger2-koa";
-import Topic from "./Topic";
 
-let app = new Koa();
-let router = new Router();
+import {v1} from "./routes";
 
-let store: Topic[] = [new Topic("test post pls ignore", "username")];
 
-// validate document
-const document = swagger.loadDocumentSync(path.join(__dirname, "..", "swagger.yml"));
+// Validate swagger API specification
+const document = swagger.loadDocumentSync(path.join(__dirname, "docs", "swagger.yml"));
 if (!swagger.validateDocument(document)) {
-    throw Error(`./swagger.yml does not conform to the Swagger 2.0 schema`);
+    throw Error("swagger.yml does not conform to the Swagger 2.0 schema");
 }
 
-// router base path is /api/v1
-router.prefix("/api/v1");
-router.get("/ping", ctx => {
-    ctx.body = {success: true, message: "hello world"};
-});
-router.get("/topics", ctx => {
-    ctx.body = store.sort((a: Topic, b: Topic) => b.votes - a.votes).slice(0, 20);
-});
-router.post("/topics", ctx => {
-    let newTopic = new Topic(ctx.request.body.text, ctx.request.body.username);
-    store.push(newTopic);
-    ctx.body = Object.assign({
-        success: true,
-        message: "Topic successfully created"
-    }, newTopic);
-});
 
+let app = new Koa();
+
+// Koa middlewares
 app.use(bodyParser());
 app.use(validate(document));
-app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(v1.routes());
+app.use(v1.allowedMethods());
 app.use(swaggerUi(document, "/docs"));
 
+// Start server on port 3000
 app.listen(3000);
