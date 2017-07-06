@@ -11,6 +11,8 @@ import * as swagger from "swagger2";
 import {ui as swaggerUi, validate} from "swagger2-koa";
 
 import {v1} from "./routes";
+import {Store} from "./utils";
+import {Topic} from "./models";
 
 
 // Validate swagger API specification
@@ -22,6 +24,8 @@ if (!swagger.validateDocument(document)) {
 
 let app = new Koa();
 let router = new Router();
+let store = new Store(Topic.comparator, {isAscending: false});
+
 
 // Hook api routes to /api
 router.use("/api", v1.routes(), v1.allowedMethods());
@@ -29,9 +33,16 @@ router.use("/api", v1.routes(), v1.allowedMethods());
 // Koa middlewares
 app.use(bodyParser());
 app.use(validate(document));
+app.use(swaggerUi(document, "/docs"));
+app.use((ctx, next) => {
+    ctx.store = store;
+    next();
+});
+
+// Koa routes
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.use(swaggerUi(document, "/docs"));
 
 // Start server on port 3000
 app.listen(3000);
+console.log("Server started, listening on port 3000");

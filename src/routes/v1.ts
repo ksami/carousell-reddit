@@ -1,9 +1,7 @@
 import * as Router from "koa-router";
 import {Topic} from "../models";
-import {Store} from "../utils";
 
 let router = new Router();
-let store = new Store(Topic.comparator, {isAscending: false});
 
 
 // Base path for routes below
@@ -15,12 +13,12 @@ router.get("/ping", ctx => {
 });
 
 router.get("/topics", ctx => {
-    ctx.body = store.getSlice(0, 20);
+    ctx.body = ctx.store.getSlice(0, 20);
 });
 
 router.post("/topics", ctx => {
     let newTopic = new Topic(ctx.request.body.text, ctx.request.body.username);
-    store.insert(newTopic);
+    ctx.store.insert(newTopic);
     ctx.body = Object.assign({
         success: true,
         message: "Topic successfully created"

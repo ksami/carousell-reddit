@@ -11,6 +11,8 @@ const Router = require("koa-router");
 const swagger = require("swagger2");
 const swagger2_koa_1 = require("swagger2-koa");
 const routes_1 = require("./routes");
+const utils_1 = require("./utils");
+const models_1 = require("./models");
 // Validate swagger API specification
 const document = swagger.loadDocumentSync(path.join(__dirname, "docs", "swagger.yml"));
 if (!swagger.validateDocument(document)) {
@@ -18,13 +20,20 @@ if (!swagger.validateDocument(document)) {
 }
 let app = new Koa();
 let router = new Router();
+let store = new utils_1.Store(models_1.Topic.comparator, { isAscending: false });
 // Hook api routes to /api
 router.use("/api", routes_1.v1.routes(), routes_1.v1.allowedMethods());
 // Koa middlewares
 app.use(bodyParser());
 app.use(swagger2_koa_1.validate(document));
+app.use(swagger2_koa_1.ui(document, "/docs"));
+app.use((ctx, next) => {
+    ctx.store = store;
+    next();
+});
+// Koa routes
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.use(swagger2_koa_1.ui(document, "/docs"));
 // Start server on port 3000
 app.listen(3000);
+console.log("Server started, listening on port 3000");
