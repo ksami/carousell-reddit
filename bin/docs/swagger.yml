@@ -44,8 +44,6 @@ paths:
       operationId: createNewTopic
       produces:
         - application/json
-      required:
-        - topic
       parameters:
         - name: topic
           description: Topic to be added

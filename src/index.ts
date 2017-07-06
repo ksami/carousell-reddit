@@ -6,6 +6,7 @@
 import * as path from "path";
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
+import * as Router from "koa-router";
 import * as swagger from "swagger2";
 import {ui as swaggerUi, validate} from "swagger2-koa";
 
@@ -20,12 +21,16 @@ if (!swagger.validateDocument(document)) {
 
 
 let app = new Koa();
+let router = new Router();
+
+// Hook api routes to /api
+router.use("/api", v1.routes(), v1.allowedMethods());
 
 // Koa middlewares
 app.use(bodyParser());
 app.use(validate(document));
-app.use(v1.routes());
-app.use(v1.allowedMethods());
+app.use(router.routes());
+app.use(router.allowedMethods());
 app.use(swaggerUi(document, "/docs"));
 
 // Start server on port 3000
