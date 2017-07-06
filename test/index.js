@@ -1,7 +1,3 @@
-const assert = require("assert");
+const storeTest = require("./Store.test");
 
-describe("Test", function(){
-    it("true is true", function(){
-        assert(true);
-    });
-});
+storeTest();
