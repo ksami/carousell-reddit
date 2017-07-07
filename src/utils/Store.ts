@@ -1,6 +1,7 @@
 import {Context} from "koa";
+import {Identifier} from "../libs";
 
-export default class Store<T> {
+export default class Store<T extends Identifier> {
     private _store: T[]
     private _sortFn: (a: T, b: T) => number
 
@@ -19,7 +20,7 @@ export default class Store<T> {
      * Returns a Koa 2 style middleware
      * to attach this store to `ctx.store`
      */
-    getMiddleware() {
+    getMiddleware(): (ctx: Context, next: () => Promise<any>) => Promise<void> {
         return async (ctx: Context, next: () => Promise<any>) => {
             ctx.store = this;
             await next();
@@ -33,7 +34,7 @@ export default class Store<T> {
      * @param {T} item 
      * @memberof Store
      */
-    insert(item: T) {
+    insert(item: T): void {
         // find index i where item should be inserted at i
         let idx = this._store.findIndex(storeItem => this._sortFn(item, storeItem) <= 0);
         if(idx === -1) {
@@ -44,6 +45,17 @@ export default class Store<T> {
     }
 
     /**
+     * Get an item by its id
+     * 
+     * @param {string} id 
+     * @returns {T|undefined}
+     * @memberof Store
+     */
+    getById(id: string): T|undefined {
+        return this._store.find(storeItem => storeItem.id === id);
+    }
+
+    /**
      * Gets a slice of items from the store
      * 
      * @param {number} [start=0] Index to start extracting from (including)
@@ -51,7 +63,7 @@ export default class Store<T> {
      * @returns {T[]} Array of items with max length n
      * @memberof Store
      */
-    getSlice(start: number = 0, end: number = this._store.length) {
+    getSlice(start: number = 0, end: number = this._store.length): T[] {
         return this._store.slice(start, end);
     }
 }

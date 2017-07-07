@@ -6,3 +6,8 @@ declare module "koa" {
     store: Store<any>;
   }
 }
+
+
+export interface Identifier {
+  id: string
+}

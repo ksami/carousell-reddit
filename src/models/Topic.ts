@@ -1,10 +1,11 @@
 import * as uuid from "uuid/v4";
+import {Identifier} from "../libs";
 
-export default class Topic {
+export default class Topic implements Identifier {
     id: string
     text: string
-    upVotes: number
-    downVotes: number
+    upvotes: number
+    downvotes: number
     votes: number
     createdAt: string
     author: string
@@ -12,8 +13,8 @@ export default class Topic {
     constructor(text: string = "", author: string = "") {
         this.id = uuid();
         this.text = text;
-        this.upVotes = 0;
-        this.downVotes = 0;
+        this.upvotes = 0;
+        this.downvotes = 0;
         this.votes = 0;
         this.createdAt = (new Date).toISOString();
         this.author = author;
@@ -32,13 +33,13 @@ export default class Topic {
         return a.votes - b.votes;
     }
 
-    upVote() {
-        this.upVotes++;
+    upvote() {
+        this.upvotes++;
         this.votes++;
     }
 
-    downVote() {
-        this.downVotes++;
+    downvote() {
+        this.downvotes++;
         this.votes--;
     }
 }

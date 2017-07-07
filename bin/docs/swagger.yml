@@ -79,7 +79,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
   '/topics/{id}':
-    put:
+    post:
       tags:
         - topic
       summary: Upvote/downvote this topic
@@ -124,8 +124,8 @@ definitions:
     required:
       - id
       - text
-      - upVotes
-      - downVotes
+      - upvotes
+      - downvotes
       - votes
       - createdAt
       - author
@@ -135,9 +135,9 @@ definitions:
       text:
         type: string
         maxLength: 255
-      upVotes:
+      upvotes:
         type: integer
-      downVotes:
+      downvotes:
         type: integer
       votes:
         type: integer

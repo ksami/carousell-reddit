@@ -5,8 +5,8 @@ class Topic {
     constructor(text = "", author = "") {
         this.id = uuid();
         this.text = text;
-        this.upVotes = 0;
-        this.downVotes = 0;
+        this.upvotes = 0;
+        this.downvotes = 0;
         this.votes = 0;
         this.createdAt = (new Date).toISOString();
         this.author = author;
@@ -23,12 +23,12 @@ class Topic {
     static comparator(a, b) {
         return a.votes - b.votes;
     }
-    upVote() {
-        this.upVotes++;
+    upvote() {
+        this.upvotes++;
         this.votes++;
     }
-    downVote() {
-        this.downVotes++;
+    downvote() {
+        this.downvotes++;
         this.votes--;
     }
 }

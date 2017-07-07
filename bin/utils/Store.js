@@ -38,6 +38,16 @@ class Store {
         }
     }
     /**
+     * Get an item by its id
+     *
+     * @param {string} id
+     * @returns {T|undefined}
+     * @memberof Store
+     */
+    getById(id) {
+        return this._store.find(storeItem => storeItem.id === id);
+    }
+    /**
      * Gets a slice of items from the store
      *
      * @param {number} [start=0] Index to start extracting from (including)
