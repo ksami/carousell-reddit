@@ -1,3 +1,5 @@
+import {Context} from "koa";
+
 export default class Store<T> {
     private _store: T[]
     private _sortFn: (a: T, b: T) => number
@@ -11,6 +13,17 @@ export default class Store<T> {
     constructor(sortFn: (a: T, b: T) => number, {isAscending = true}) {
         this._store = [];
         this._sortFn = isAscending ? sortFn : (a: T, b: T) => sortFn(b, a);
+    }
+
+    /**
+     * Returns a Koa 2 style middleware
+     * to attach this store to `ctx.store`
+     */
+    getMiddleware() {
+        return async (ctx: Context, next: () => Promise<any>) => {
+            ctx.store = this;
+            await next();
+        };
     }
 
 

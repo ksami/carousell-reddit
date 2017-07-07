@@ -12,6 +12,16 @@ class Store {
         this._sortFn = isAscending ? sortFn : (a, b) => sortFn(b, a);
     }
     /**
+     * Returns a Koa 2 style middleware
+     * to attach this store to `ctx.store`
+     */
+    getMiddleware() {
+        return async (ctx, next) => {
+            ctx.store = this;
+            await next();
+        };
+    }
+    /**
      * Inserts an item at its sorted location in the store
      *
      * @param {T} item

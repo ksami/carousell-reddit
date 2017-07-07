@@ -28,10 +28,7 @@ router.use("/api", routes_1.v1.routes(), routes_1.v1.allowedMethods());
 app.use(bodyParser());
 app.use(swagger2_koa_1.validate(document));
 app.use(swagger2_koa_1.ui(document, "/docs"));
-app.use((ctx, next) => {
-    ctx.store = store;
-    next();
-});
+app.use(store.getMiddleware());
 // Koa routes
 app.use(router.routes());
 app.use(router.allowedMethods());
