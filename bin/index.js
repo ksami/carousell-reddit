@@ -13,6 +13,7 @@ const swagger2_koa_1 = require("swagger2-koa");
 const routes_1 = require("./routes");
 const utils_1 = require("./utils");
 const models_1 = require("./models");
+const port = process.env.PORT || 3000;
 // Validate swagger API specification
 const document = swagger.loadDocumentSync(path.join(__dirname, "docs", "swagger.yml"));
 if (!swagger.validateDocument(document)) {
@@ -34,6 +35,6 @@ app.use((ctx, next) => {
 // Koa routes
 app.use(router.routes());
 app.use(router.allowedMethods());
-// Start server on port 3000
-app.listen(3000);
-console.log("Server started, listening on port 3000");
+// Start server listening on port <port>
+app.listen(port);
+console.log(`Server started, listening on port ${port}`);

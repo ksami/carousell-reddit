@@ -14,6 +14,7 @@ import {v1} from "./routes";
 import {Store} from "./utils";
 import {Topic} from "./models";
 
+const port = process.env.PORT || 3000;
 
 // Validate swagger API specification
 const document = swagger.loadDocumentSync(path.join(__dirname, "docs", "swagger.yml"));
@@ -43,6 +44,6 @@ app.use((ctx, next) => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-// Start server on port 3000
-app.listen(3000);
-console.log("Server started, listening on port 3000");
+// Start server listening on port <port>
+app.listen(port);
+console.log(`Server started, listening on port ${port}`);
