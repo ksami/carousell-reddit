@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid = require("uuid/v4");
+const libs_1 = require("../libs");
 class Topic {
     constructor(text = "", author = "") {
         this.id = uuid();
+        this.createdAt = (new Date).toISOString();
         this.text = text;
         this.upvotes = 0;
         this.downvotes = 0;
         this.votes = 0;
-        this.createdAt = (new Date).toISOString();
         this.author = author;
     }
     /**
@@ -23,13 +24,39 @@ class Topic {
     static comparator(a, b) {
         return a.votes - b.votes;
     }
-    upvote() {
+    /**
+     * Increases the vote count on this topic
+     *
+     * @private
+     * @memberof Topic
+     */
+    _upvote() {
         this.upvotes++;
         this.votes++;
     }
-    downvote() {
+    /**
+     * Decreases the vote count on this topic
+     *
+     * @private
+     * @memberof Topic
+     */
+    _downvote() {
         this.downvotes++;
         this.votes--;
+    }
+    /**
+     * Executes <action> on this topic
+     *
+     * @param {ACTION} action
+     * @memberof Topic
+     */
+    update(action) {
+        if (action === libs_1.ACTION.UPVOTE) {
+            this._upvote();
+        }
+        else {
+            this._downvote();
+        }
     }
 }
 exports.default = Topic;

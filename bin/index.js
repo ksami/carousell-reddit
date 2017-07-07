@@ -26,11 +26,6 @@ let store = new utils_1.Store(models_1.Topic.comparator, { isAscending: false })
 router.use("/api", routes_1.v1.routes(), routes_1.v1.allowedMethods());
 // Koa middlewares
 app.use(bodyParser());
-app.use(async (ctx, next) => {
-    console.log(ctx.request.body);
-    await next();
-    console.log(ctx.body);
-});
 app.use(swagger2_koa_1.validate(document));
 app.use(swagger2_koa_1.ui(document, "/docs"));
 app.use(store.getMiddleware());

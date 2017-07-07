@@ -1,22 +1,24 @@
 import * as uuid from "uuid/v4";
-import {Identifier} from "../libs";
+import {Identifier, Mutable, ACTION} from "../libs";
 
-export default class Topic implements Identifier {
-    id: string
+
+
+export default class Topic implements Identifier, Mutable {
+    readonly id: string
+    readonly createdAt: string    
     text: string
     upvotes: number
     downvotes: number
     votes: number
-    createdAt: string
     author: string
 
     constructor(text: string = "", author: string = "") {
         this.id = uuid();
+        this.createdAt = (new Date).toISOString();
         this.text = text;
         this.upvotes = 0;
         this.downvotes = 0;
         this.votes = 0;
-        this.createdAt = (new Date).toISOString();
         this.author = author;
     }
 
@@ -33,13 +35,39 @@ export default class Topic implements Identifier {
         return a.votes - b.votes;
     }
 
-    upvote() {
+    /**
+     * Increases the vote count on this topic
+     * 
+     * @private
+     * @memberof Topic
+     */
+    private _upvote() {
         this.upvotes++;
         this.votes++;
     }
 
-    downvote() {
+    /**
+     * Decreases the vote count on this topic
+     * 
+     * @private
+     * @memberof Topic
+     */
+    private _downvote() {
         this.downvotes++;
         this.votes--;
+    }
+
+    /**
+     * Executes <action> on this topic
+     * 
+     * @param {ACTION} action
+     * @memberof Topic
+     */
+    update(action: ACTION) {
+        if(action === ACTION.UPVOTE) {
+            this._upvote();
+        } else {
+            this._downvote();
+        }
     }
 }

@@ -25,9 +25,10 @@ class Store {
      * Inserts an item at its sorted location in the store
      *
      * @param {T} item
+     * @returns {T} Item that was inserted
      * @memberof Store
      */
-    insert(item) {
+    insertItem(item) {
         // find index i where item should be inserted at i
         let idx = this._store.findIndex(storeItem => this._sortFn(item, storeItem) <= 0);
         if (idx === -1) {
@@ -36,16 +37,25 @@ class Store {
         else {
             this._store.splice(idx, 0, item);
         }
+        return item;
     }
     /**
-     * Get an item by its id
+     * Executes <action> on an item in the store based on id
      *
      * @param {string} id
-     * @returns {T|undefined}
+     * @param {ACTION} action
+     * @returns {(T|undefined)} Updated item
      * @memberof Store
      */
-    getById(id) {
-        return this._store.find(storeItem => storeItem.id === id);
+    updateItemById(id, action) {
+        let item = this._store.find(storeItem => storeItem.id === id);
+        if (typeof item === "undefined") {
+            return undefined;
+        }
+        else {
+            item.update(action);
+            return item;
+        }
     }
     /**
      * Gets a slice of items from the store

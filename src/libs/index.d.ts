@@ -7,7 +7,15 @@ declare module "koa" {
   }
 }
 
+export enum ACTION {
+    UPVOTE,
+    DOWNVOTE
+}
 
 export interface Identifier {
   id: string
+}
+
+export interface Mutable {
+  update(...a: any[]): void
 }

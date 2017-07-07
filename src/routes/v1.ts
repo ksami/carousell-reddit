@@ -1,5 +1,6 @@
 import * as Router from "koa-router";
 import {Topic} from "../models";
+import {ACTION} from "../libs";
 
 let router = new Router();
 
@@ -18,7 +19,7 @@ router.get("/topics", ctx => {
 
 router.post("/topics", ctx => {
     const newTopic = new Topic(ctx.request.body.text, ctx.request.body.username);
-    ctx.store.insert(newTopic);
+    ctx.store.insertItem(newTopic);
     ctx.body = Object.assign({
         success: true,
         message: "Topic successfully created"
@@ -28,12 +29,12 @@ router.post("/topics", ctx => {
 router.post("/topics/:id", ctx => {
     const id = ctx.params.id;
     const action = ctx.request.body.action;
-    let topic = ctx.store.getById(id);
+    let topic;
 
     if(action === "upvote") {
-        topic.upvote();
+        topic = ctx.store.updateItemById(id, ACTION.UPVOTE);
     } else if(action === "downvote") {
-        topic.downvote();
+        topic = ctx.store.updateItemById(id, ACTION.DOWNVOTE);
     } else {
         throw new Error("body.action not upvote or downvote");
     }
