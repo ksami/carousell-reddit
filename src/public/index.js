@@ -1,35 +1,34 @@
 var root = document.body;
-
-// var increment = function() {
-//     m.request({
-//         method: "PUT",
-//         url: "//rem-rest-api.herokuapp.com/api/tutorial/1",
-//         data: {count: count + 1},
-//         withCredentials: true,
-//     })
-//     .then(function(data) {
-//         count = parseInt(data.count)
-//     })
-// }
-
 var items = [
-  {author: "user1", text: "test post pls ignore"},
-  {author: "user2", text: "test post pls ignore too"},
-  {author: "user3", text: "test post pls ignore three"},
+  {author: "user1", votes: 500, text: "test post pls ignore"},
+  {author: "user2", votes: 400, text: "test post pls ignore too"},
+  {author: "user3", votes: 300, text: "test post pls ignore three"},
 ];
 
+function clickHandler(action) {
+  console.log("clicked", action);
+}
+
 function makeList(items) {
-  return m("div", {class: "list-group"},
-    items.map(item => m("div", {class: "list-group-item"}, [
-      m("h4", {class: "list-group-item-heading"}, item.text),
-      m("p", {class: "list-group-item-text"}, `by ${item.author}`)
-    ]))
+  return m(".list-group",
+    items.map(item => m(".list-group-item", m(".row", [
+      m(".col-md-1", {style: "display:block; text-align:center"}, [
+        m("a", {onclick: ()=>clickHandler("up")}, m("i.text-center.glyphicon.glyphicon-triangle-top[aria-hidden=true]", {style: "opacity:0.7"})),
+        m("div", item.votes),
+        m("a", {onclick: ()=>clickHandler("down")}, m("i.text-center.glyphicon.glyphicon-triangle-bottom[aria-hidden=true]", {style: "opacity:0.7"}))
+      ]),
+      m(".col-md-11", [
+        m("h4.list-group-item-heading", item.text),
+        m("p.list-group-item-text", `by ${item.author}`)
+      ])
+    ])))
   );
 }
 
 var Main = {
   view: function() {
-    return m(".container", {style: "margin-top:30px"},
+    return m(".container", [
+      m(".row", m(".col-md-3", m(".page-header", m("h1", "Diggit")))),
       m(".row",
         m(".col-md-12",
           m(".panel.panel-default", [
@@ -38,7 +37,7 @@ var Main = {
           ])
         )
       )
-    );
+    ]);
   }
 };
 
