@@ -20,13 +20,18 @@ router.post("/topics/create", ctx => {
         message: "Topic successfully created"
     }, newTopic);
 });
-router.post("/topics/:id", ctx => {
+router.post("/topics/:id/vote", ctx => {
     const id = ctx.params.id;
     const action = ctx.request.body.action;
     let topic = ctx.store.updateItemById(id, action);
-    ctx.body = Object.assign({
-        success: true,
-        message: "Topic successfully updated"
-    }, topic);
+    if (topic) {
+        ctx.body = Object.assign({
+            success: true,
+            message: "Topic successfully updated"
+        }, topic);
+    }
+    else {
+        throw new Error("ID not found");
+    }
 });
 exports.default = router;

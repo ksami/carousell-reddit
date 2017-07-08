@@ -37,6 +37,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Topic'
+  /topics/create:
     post:
       tags:
         - topic
@@ -78,7 +79,7 @@ paths:
               message: Missing parameters
           schema:
             $ref: '#/definitions/ApiResponse'
-  '/topics/{id}':
+  '/topics/{id}/vote':
     post:
       tags:
         - topic

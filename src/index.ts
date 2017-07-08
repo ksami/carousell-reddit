@@ -25,7 +25,7 @@ if (!swagger.validateDocument(document)) {
 
 let app = new Koa();
 let router = new Router();
-let store = new Store(Topic.comparator, {isAscending: false});
+let store = new Store(Topic.comparator);
 
 
 // Hook api routes to /api

@@ -21,7 +21,7 @@ if (!swagger.validateDocument(document)) {
 }
 let app = new Koa();
 let router = new Router();
-let store = new utils_1.Store(models_1.Topic.comparator, { isAscending: false });
+let store = new utils_1.Store(models_1.Topic.comparator);
 // Hook api routes to /api
 router.use("/api", routes_1.v1.routes(), routes_1.v1.allowedMethods());
 // Koa middlewares

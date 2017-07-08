@@ -28,11 +28,11 @@ export default class Topic implements Identifier, Mutable {
      * @static
      * @param {Topic} a 
      * @param {Topic} b 
-     * @returns {number} negative for a before b and vice-versa, 0 for same ordering
+     * @returns {number} negative for b before a and vice-versa, 0 for same ordering
      * @memberof Topic
      */
     static comparator(a: Topic, b: Topic): number {
-        return a.votes - b.votes;
+        return b.votes - a.votes;
     }
 
     /**
