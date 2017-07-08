@@ -24,7 +24,7 @@ class Store {
     /**
      * Inserts an item at its sorted location in the store
      *
-     * @param {T} item
+     * @param {T} item Item to be inserted
      * @returns {T} Item that was inserted
      * @memberof Store
      */
@@ -42,8 +42,8 @@ class Store {
     /**
      * Executes <action> on an item in the store based on id
      *
-     * @param {string} id
-     * @param {ACTION} action
+     * @param {string} id id of item to be updated
+     * @param {ACTION} action "upvote" or "downvote"
      * @returns {(T|undefined)} Updated item
      * @memberof Store
      */

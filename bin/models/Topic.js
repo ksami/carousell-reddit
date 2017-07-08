@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid = require("uuid/v4");
-const libs_1 = require("../libs");
 class Topic {
     constructor(text = "", author = "") {
         this.id = uuid();
@@ -51,7 +50,7 @@ class Topic {
      * @memberof Topic
      */
     update(action) {
-        if (action === libs_1.ACTION.UPVOTE) {
+        if (action === "upvote") {
             this._upvote();
         }
         else {

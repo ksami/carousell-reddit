@@ -17,7 +17,7 @@ router.get("/topics", ctx => {
     ctx.body = ctx.store.getSlice(0, 20);
 });
 
-router.post("/topics", ctx => {
+router.post("/topics/create", ctx => {
     const newTopic = new Topic(ctx.request.body.text, ctx.request.body.username);
     ctx.store.insertItem(newTopic);
     ctx.body = Object.assign({
@@ -29,15 +29,8 @@ router.post("/topics", ctx => {
 router.post("/topics/:id", ctx => {
     const id = ctx.params.id;
     const action = ctx.request.body.action;
-    let topic;
 
-    if(action === "upvote") {
-        topic = ctx.store.updateItemById(id, ACTION.UPVOTE);
-    } else if(action === "downvote") {
-        topic = ctx.store.updateItemById(id, ACTION.DOWNVOTE);
-    } else {
-        throw new Error("body.action not upvote or downvote");
-    }
+    let topic = ctx.store.updateItemById(id, action);
 
     ctx.body = Object.assign({
         success: true,

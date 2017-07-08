@@ -64,7 +64,7 @@ export default class Topic implements Identifier, Mutable {
      * @memberof Topic
      */
     update(action: ACTION) {
-        if(action === ACTION.UPVOTE) {
+        if(action === "upvote") {
             this._upvote();
         } else {
             this._downvote();

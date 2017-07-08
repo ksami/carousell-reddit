@@ -7,10 +7,7 @@ declare module "koa" {
   }
 }
 
-export enum ACTION {
-    UPVOTE,
-    DOWNVOTE
-}
+export type ACTION = "upvote" | "downvote";
 
 export interface Identifier {
   id: string
