@@ -8,6 +8,7 @@ const path = require("path");
 const Koa = require("koa");
 const bodyParser = require("koa-bodyparser");
 const Router = require("koa-router");
+const send = require("koa-send");
 const swagger = require("swagger2");
 const swagger2_koa_1 = require("swagger2-koa");
 const routes_1 = require("./routes");
@@ -30,6 +31,17 @@ app.use(swagger2_koa_1.validate(document));
 app.use(swagger2_koa_1.ui(document, "/docs"));
 app.use(store.getMiddleware());
 // Koa routes
+app.use(async (ctx, next) => {
+    if (ctx.path === "/") {
+        await send(ctx, "/index.html", { root: path.join(__dirname, "public") });
+    }
+    else if (ctx.path === "/index.js") {
+        await send(ctx, "/index.js", { root: path.join(__dirname, "public") });
+    }
+    else {
+        await next();
+    }
+});
 app.use(router.routes());
 app.use(router.allowedMethods());
 // Start server listening on port <port>

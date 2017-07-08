@@ -7,6 +7,7 @@ import * as path from "path";
 import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 import * as Router from "koa-router";
+import * as send from "koa-send";
 import * as swagger from "swagger2";
 import {ui as swaggerUi, validate} from "swagger2-koa";
 
@@ -38,6 +39,15 @@ app.use(swaggerUi(document, "/docs"));
 app.use(store.getMiddleware());
 
 // Koa routes
+app.use(async (ctx, next) => {
+    if(ctx.path === "/") {
+        await send(ctx, "/index.html", {root: path.join(__dirname, "public")});
+    } else if(ctx.path === "/index.js") {
+        await send(ctx, "/index.js", {root: path.join(__dirname, "public")});
+    } else {
+        await next();
+    }
+});
 app.use(router.routes());
 app.use(router.allowedMethods());
 
