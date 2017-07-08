@@ -2,14 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class Store {
     /**
-     * Creates an instance of Store
-     * @param {(a: T, b: T) => number} sortFn Sorting function to determine order between two items: negative for a before b and vice-versa, 0 for same ordering
-     * @param {opts.boolean} [isAscending=true] Sort in ascending order
+     * Creates an instance of Store with items sorted in descending order
+     * @param {(a: T, b: T) => number} sortFn Sorting function to determine order between two items: negative for b before a and vice-versa, 0 for same ordering
      * @memberof Store
      */
-    constructor(sortFn, { isAscending = true }) {
+    constructor(sortFn) {
         this._store = [];
-        this._sortFn = isAscending ? sortFn : (a, b) => sortFn(b, a);
+        this._sortFn = sortFn;
+    }
+    /**
+     * Swaps the order of two elements in the store
+     *
+     * @private
+     * @param {number} idx1 Index of first element
+     * @param {number} idx2 Index of second element
+     * @memberof Store
+     */
+    _swap(idx1, idx2) {
+        const swap = this._store[idx2];
+        this._store[idx2] = this._store[idx1];
+        this._store[idx1] = swap;
     }
     /**
      * Returns a Koa 2 style middleware
@@ -48,12 +60,22 @@ class Store {
      * @memberof Store
      */
     updateItemById(id, action) {
-        let item = this._store.find(storeItem => storeItem.id === id);
-        if (typeof item === "undefined") {
+        let idx = this._store.findIndex(storeItem => storeItem.id === id);
+        if (idx === -1) {
             return undefined;
         }
         else {
+            let item = this._store[idx];
             item.update(action);
+            // Swap updated item with its neighbours to maintain ordering in the store
+            if (action === "upvote" &&
+                idx > 0 && this._sortFn(this._store[idx - 1], item) > 0) {
+                this._swap(idx - 1, idx);
+            }
+            else if (action === "downvote" &&
+                idx < this._store.length - 1 && this._sortFn(item, this._store[idx + 1]) > 0) {
+                this._swap(idx, idx + 1);
+            }
             return item;
         }
     }
