@@ -37,10 +37,10 @@ class Store {
      * Inserts an item at its sorted location in the store
      *
      * @param {T} item Item to be inserted
-     * @returns {T} Item that was inserted
+     * @returns {Promise<T>} Item that was inserted
      * @memberof Store
      */
-    insertItem(item) {
+    async insertItem(item) {
         // find index i where item should be inserted at i
         let idx = this._store.findIndex(storeItem => this._sortFn(item, storeItem) <= 0);
         if (idx === -1) {
@@ -49,20 +49,20 @@ class Store {
         else {
             this._store.splice(idx, 0, item);
         }
-        return item;
+        return Promise.resolve(item);
     }
     /**
      * Executes <action> on an item in the store based on id
      *
      * @param {string} id id of item to be updated
      * @param {ACTION} action "upvote" or "downvote"
-     * @returns {(T|undefined)} Updated item
+     * @returns {Promise<T>} Updated item
      * @memberof Store
      */
-    updateItemById(id, action) {
+    async updateItemById(id, action) {
         let idx = this._store.findIndex(storeItem => storeItem.id === id);
         if (idx === -1) {
-            return undefined;
+            return Promise.reject(undefined);
         }
         else {
             let item = this._store[idx];
@@ -76,7 +76,7 @@ class Store {
                 idx < this._store.length - 1 && this._sortFn(item, this._store[idx + 1]) > 0) {
                 this._swap(idx, idx + 1);
             }
-            return item;
+            return Promise.resolve(item);
         }
     }
     /**
@@ -84,11 +84,11 @@ class Store {
      *
      * @param {number} [start=0] Index to start extracting from (including)
      * @param {number} [end=this.length] Index to end extracting from (excluding)
-     * @returns {T[]} Array of items with max length n
+     * @returns {Promise<T[]>} Array of items with max length n
      * @memberof Store
      */
-    getSlice(start = 0, end = this._store.length) {
-        return this._store.slice(start, end);
+    async getSlice(start = 0, end = this._store.length) {
+        return Promise.resolve(this._store.slice(start, end));
     }
 }
 exports.default = Store;

@@ -13,15 +13,6 @@ tags:
 schemes:
   - http
 paths:
-  /ping:
-    get:
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Success
-          schema:
-            $ref: '#/definitions/ApiResponse'
   /topics:
     get:
       tags:

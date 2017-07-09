@@ -45,10 +45,10 @@ export default class Store<T extends Mutable & Identifier> {
      * Inserts an item at its sorted location in the store
      * 
      * @param {T} item Item to be inserted
-     * @returns {T} Item that was inserted
+     * @returns {Promise<T>} Item that was inserted
      * @memberof Store
      */
-    insertItem(item: T): T {
+    async insertItem(item: T): Promise<T> {
         // find index i where item should be inserted at i
         let idx = this._store.findIndex(storeItem => this._sortFn(item, storeItem) <= 0);
         if(idx === -1) {
@@ -56,7 +56,7 @@ export default class Store<T extends Mutable & Identifier> {
         } else {
             this._store.splice(idx, 0, item);
         }
-        return item;
+        return Promise.resolve(item);
     }
 
     /**
@@ -64,13 +64,13 @@ export default class Store<T extends Mutable & Identifier> {
      * 
      * @param {string} id id of item to be updated
      * @param {ACTION} action "upvote" or "downvote"
-     * @returns {(T|undefined)} Updated item
+     * @returns {Promise<T>} Updated item
      * @memberof Store
      */
-    updateItemById(id: string, action: ACTION): T|undefined {
+    async updateItemById(id: string, action: ACTION): Promise<T> {
         let idx = this._store.findIndex(storeItem => storeItem.id === id);
         if(idx === -1) {
-            return undefined;
+            return Promise.reject(undefined);
         } else {
             let item = this._store[idx];
             item.update(action);
@@ -84,7 +84,7 @@ export default class Store<T extends Mutable & Identifier> {
                 this._swap(idx, idx+1);
             }
 
-            return item;
+            return Promise.resolve(item);
         }
     }
 
@@ -93,10 +93,10 @@ export default class Store<T extends Mutable & Identifier> {
      * 
      * @param {number} [start=0] Index to start extracting from (including)
      * @param {number} [end=this.length] Index to end extracting from (excluding)
-     * @returns {T[]} Array of items with max length n
+     * @returns {Promise<T[]>} Array of items with max length n
      * @memberof Store
      */
-    getSlice(start: number = 0, end: number = this._store.length): T[] {
-        return this._store.slice(start, end);
+    async getSlice(start: number = 0, end: number = this._store.length): Promise<T[]> {
+        return Promise.resolve(this._store.slice(start, end));
     }
 }
