@@ -77,7 +77,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
   '/topics/{id}/vote':
-    post:
+    put:
       tags:
         - topic
       summary: Upvote/downvote this topic

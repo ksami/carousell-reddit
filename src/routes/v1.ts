@@ -23,7 +23,7 @@ router.post("/topics/create", ctx => {
     ctx.body = ctx.store.getSlice(0, 20);
 });
 
-router.post("/topics/:id/vote", ctx => {
+router.put("/topics/:id/vote", ctx => {
     const id = ctx.params.id;
     const action = ctx.request.body.action;
 

@@ -8,13 +8,16 @@ function request(action, data) {
   switch(action) {
     case "getList": opts = {method: "GET", url: `${baseUrl}/topics`}; break;
     case "create": opts = {method: "POST", url: `${baseUrl}/topics/create`, data}; break;
-    case "upvote": data.action = action; opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
-    case "downvote": data.action = action; opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
+    case "upvote": data.action = action; opts = {method: "PUT", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
+    case "downvote": data.action = action; opts = {method: "PUT", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
   };
 
   return m.request(opts).then(data => items = data);
 }
 
+/**
+ * Components
+ */
 
 var List = {
   view: function(vnode) {
