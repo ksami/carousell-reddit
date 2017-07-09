@@ -1,20 +1,24 @@
 import * as uuid from "uuid/v4";
 import {Identifier, Mutable, ACTION} from "../libs";
 
-
-
 export default class Topic implements Identifier, Mutable {
     readonly id: string
-    readonly createdAt: string    
+    readonly createdAt: number
     text: string
     upvotes: number
     downvotes: number
     votes: number
     author: string
 
+    /**
+     * Creates an instance of Topic
+     * @param {string} [text=""] Text of the topic
+     * @param {string} [author=""] User who created the topic
+     * @memberof Topic
+     */
     constructor(text: string = "", author: string = "") {
         this.id = uuid();
-        this.createdAt = (new Date).toISOString();
+        this.createdAt = Date.now();
         this.text = text;
         this.upvotes = 0;
         this.downvotes = 0;

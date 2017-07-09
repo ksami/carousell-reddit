@@ -133,8 +133,7 @@ definitions:
       votes:
         type: integer
       createdAt:
-        type: string
-        format: date-time
+        type: integer
       author:
         type: string
     xml:

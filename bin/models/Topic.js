@@ -2,9 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid = require("uuid/v4");
 class Topic {
+    /**
+     * Creates an instance of Topic
+     * @param {string} [text=""] Text of the topic
+     * @param {string} [author=""] User who created the topic
+     * @memberof Topic
+     */
     constructor(text = "", author = "") {
         this.id = uuid();
-        this.createdAt = (new Date).toISOString();
+        this.createdAt = Date.now();
         this.text = text;
         this.upvotes = 0;
         this.downvotes = 0;
