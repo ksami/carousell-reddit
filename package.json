@@ -13,6 +13,7 @@
   "dependencies": {
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
+    "koa-pino-logger": "^2.1.1",
     "koa-router": "^7.2.1",
     "swagger2": "0.0.24",
     "swagger2-koa": "0.0.36",

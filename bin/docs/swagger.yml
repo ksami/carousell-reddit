@@ -64,7 +64,7 @@ paths:
           examples:
             application/json:
               success: false
-              message: Missing parameters
+              code: "SWAGGER_REQUEST_VALIDATION_FAILED"
           schema:
             $ref: '#/definitions/ApiResponse'
   '/topics/{id}/vote':
@@ -143,10 +143,7 @@ definitions:
     type: object
     required:
       - success
-      - message
     properties:
-      topic:
-        $ref: '#/definitions/Topic'
       success:
         type: boolean
       message:

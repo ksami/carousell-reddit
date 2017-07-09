@@ -4,6 +4,10 @@ import {Store} from "../utils";
 declare module "koa" {
   interface BaseContext {
     store: Store<any>;
+    log: {
+      info: (s: any) => void,
+      error: (s: any) => void
+    }
   }
 }
 
