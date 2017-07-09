@@ -63,14 +63,11 @@ paths:
                 type: string
       responses:
         '200':
-          description: Successfully created
-          examples:
-            application/json:
-              success: true
-              message: Topic successfully created
-              id: abc123
+          description: List of top 20 topics sorted in descending order by upvotes
           schema:
-            $ref: '#/definitions/ApiResponse'
+            type: array
+            items:
+              $ref: '#/definitions/Topic'
         '400':
           description: Bad request
           examples:
@@ -108,9 +105,11 @@ paths:
                   - downvote
       responses:
         '200':
-          description: Successfully upvoted/downvoted
+          description: List of top 20 topics sorted in descending order by upvotes
           schema:
-            $ref: '#/definitions/ApiResponse'
+            type: array
+            items:
+              $ref: '#/definitions/Topic'
         '400':
           description: Bad request
           examples:

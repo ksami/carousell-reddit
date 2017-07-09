@@ -20,10 +20,7 @@ router.get("/topics", ctx => {
 router.post("/topics/create", ctx => {
     const newTopic = new Topic(ctx.request.body.text, ctx.request.body.username);
     ctx.store.insertItem(newTopic);
-    ctx.body = Object.assign({
-        success: true,
-        message: "Topic successfully created"
-    }, newTopic);
+    ctx.body = ctx.store.getSlice(0, 20);
 });
 
 router.post("/topics/:id/vote", ctx => {
@@ -33,10 +30,7 @@ router.post("/topics/:id/vote", ctx => {
     let topic = ctx.store.updateItemById(id, action);
 
     if(topic) {
-        ctx.body = Object.assign({
-                success: true,
-                message: "Topic successfully updated"
-        }, topic);
+        ctx.body = ctx.store.getSlice(0, 20);
     } else {
         throw new Error("ID not found");
     }

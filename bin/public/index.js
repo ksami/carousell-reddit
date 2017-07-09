@@ -1,9 +1,5 @@
 var root = document.body;
-var items = [
-  {id: "1", author: "user1", votes: 500, text: "test post pls ignore"},
-  {id: "2", author: "user2", votes: 400, text: "test post pls ignore too"},
-  {id: "3", author: "user3", votes: 300, text: "test post pls ignore three"},
-];
+var items = [];
 
 function request(action, data) {
   const baseUrl = "/api/v1";
@@ -12,48 +8,47 @@ function request(action, data) {
   switch(action) {
     case "getList": opts = {method: "GET", url: `${baseUrl}/topics`}; break;
     case "create": opts = {method: "POST", url: `${baseUrl}/topics/create`, data}; break;
-    case "upvote": opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
-    case "downvote": opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
+    case "upvote": data.action = action; opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
+    case "downvote": data.action = action; opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
   };
   console.log(action, opts);
-  m.request(opts).then(res => processData(action, res));
+  return m.request(opts).then(data => items = data);
 }
 
-function processData(action, data) {
-  console.log(action, data);
-}
 
-function makeList(items) {
-  return m(".list-group", {oninit: ()=>request("getList")},
-    items.map(item => m(".list-group-item", m(".row", [
-      m(".col-md-1", {style: "display:block; text-align:center"}, [
-        m("a", {onclick: ()=>request("upvote", {id: item.id})}, m("i.text-center.glyphicon.glyphicon-triangle-top[aria-hidden=true]")),
-        m("div", item.votes),
-        m("a", {onclick: ()=>request("downvote", {id: item.id})}, m("i.text-center.glyphicon.glyphicon-triangle-bottom[aria-hidden=true]"))
-      ]),
-      m(".col-md-11", [
-        m("h4.list-group-item-heading", item.text),
-        m("p.list-group-item-text", `by ${item.author}`)
-      ])
-    ])))
-  );
-}
+var List = {
+  view: function(vnode) {
+    return m(".list-group", {oninit: ()=>request("getList")},
+      vnode.attrs.items.map(item => m(".list-group-item", m(".row", [
+        m(".col-md-1", {style: "display:block; text-align:center"}, [
+          m("a", {onclick: ()=>request("upvote", {id: item.id})}, m("i.text-center.glyphicon.glyphicon-triangle-top[aria-hidden=true]")),
+          m("div", item.votes),
+          m("a", {onclick: ()=>request("downvote", {id: item.id})}, m("i.text-center.glyphicon.glyphicon-triangle-bottom[aria-hidden=true]"))
+        ]),
+        m(".col-md-11", [
+          m("h4.list-group-item-heading", item.text),
+          m("p.list-group-item-text", `by ${item.author}`)
+        ])
+      ])))
+    );
+  }
+};
 
-function makeModal() {
-  return m(".modal.fade[aria-labelledby='createTopicModalLabel'][id='createTopicModal'][role='dialog'][tabindex='-1']",
-    m(".modal-dialog[role='document']",
-      m(".modal-content",
-        m(".modal-header",
-          m("button.close[aria-label='Close'][data-dismiss='modal'][type='button']", m("span[aria-hidden='true']", m.trust("&times;"))),
-          m("h4.modal-title[id='createTopicModalLabel']", "Create Topic")
-        ),
-        m(".modal-body",
-          m(Form)
+var Modal = {
+  view: function() {
+    return m(".modal.fade[aria-labelledby='createTopicModalLabel'][id='createTopicModal'][role='dialog'][tabindex='-1']",
+      m(".modal-dialog[role='document']",
+        m(".modal-content",
+          m(".modal-header",
+            m("button.close[aria-label='Close'][data-dismiss='modal'][type='button']", m("span[aria-hidden='true']", m.trust("&times;"))),
+            m("h4.modal-title[id='createTopicModalLabel']", "Create Topic")
+          ),
+          m(".modal-body", m(Form))
         )
       )
-    )
-  );
-}
+    );
+  }
+};
 
 var Form = {
   username: "",
@@ -71,7 +66,7 @@ var Form = {
       request("create", {
         username: this.username,
         text: this.text
-      });
+      }).then(() => $("#createTopicModal").modal("hide"));
     }
   },
 
@@ -98,7 +93,7 @@ var Form = {
 
 var Main = {
   view: function() {
-    return m("div", makeModal(), m(".container", [
+    return m("div", m(Modal), m(".container", [
       m(".row",
         m(".col-md-12", m(".page-header", m("h1", "Diggit")))
       ),
@@ -109,7 +104,7 @@ var Main = {
         m(".col-md-12",
           m(".panel.panel-default", [
             m(".panel-heading", "Posts"),
-            makeList(items)
+            m(List, {items})
           ])
         )
       )
