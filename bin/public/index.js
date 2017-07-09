@@ -30,7 +30,10 @@ var List = {
         ]),
         m(".col-md-11", [
           m("h4.list-group-item-heading", item.text),
-          m("p.list-group-item-text", `by ${item.author}`)
+          m("p.list-group-item-text", {style: "opacity:0.7"},
+            m("small", "by "),
+            m("span", `${item.author}`)
+          )
         ])
       ])))
     );
