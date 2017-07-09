@@ -3,7 +3,7 @@ info:
   description: Clone of Digg/Reddit where users can upvote/downvote topics
   version: 1.0.0
   title: Digg/Reddit clone with upvote and downvotes
-host: 'http://safe-ravine-86325.herokuapp.com'
+host: 'safe-ravine-86325.herokuapp.com'
 basePath: /api/v1
 tags:
   - name: topic
