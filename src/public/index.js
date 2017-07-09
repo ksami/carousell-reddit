@@ -15,8 +15,12 @@ function request(action, data) {
     case "upvote": opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
     case "downvote": opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
   };
+  console.log(action, opts);
+  m.request(opts).then(res => processData(action, res));
+}
 
-  m.request(opts).then(console.log);
+function processData(action, data) {
+  console.log(action, data);
 }
 
 function makeList(items) {
@@ -40,28 +44,56 @@ function makeModal() {
     m(".modal-dialog[role='document']",
       m(".modal-content",
         m(".modal-header",
-          m("button.close[aria-label='Close'][data-dismiss='modal'][type='button']", 
-            m("span[aria-hidden='true']", 
-              m.trust("&times;")
-            )
-          ),
-          m("h4.modal-title[id='createTopicModalLabel']", 
-            "Create Topic"
-          )
+          m("button.close[aria-label='Close'][data-dismiss='modal'][type='button']", m("span[aria-hidden='true']", m.trust("&times;"))),
+          m("h4.modal-title[id='createTopicModalLabel']", "Create Topic")
         ),
-        m(".modal-body", "//TODO"
-        ),
-        m(".modal-footer",
-          m("button.btn.btn-default[data-dismiss='modal'][type='button']", 
-            "Close"
-          ),
-          m("button.btn.btn-primary[type='button']", 
-            "Submit"
-          )
+        m(".modal-body",
+          m(Form)
         )
       )
     )
   );
+}
+
+var Form = {
+  username: "",
+  text: "",
+  validUsername: true,
+  validText: true,
+
+  submit: function() {
+    this.validUsername = this.username !== "";
+    this.validText = this.text !== "";
+
+    if(!this.validUsername || !this.validText) {
+      m.redraw();
+    } else {
+      request("create", {
+        username: this.username,
+        text: this.text
+      });
+    }
+  },
+
+  view: function(vnode) {
+    return m("form",
+      m(".form-group", {class: vnode.state.validUsername ? "" : "has-error"},
+        m("label.control-label[for='usernameInput']", "Username"),
+        m("input.form-control[id='usernameInput'][type='text']", {
+          value: vnode.state.username,
+          onchange: e => vnode.state.username = e.currentTarget.value
+        })
+      ),
+      m(".form-group", {class: vnode.state.validText ? "" : "has-error"},
+        m("label.control-label[for='textInput']", "Text"),
+        m("input.form-control[id='textInput'][type='text']", {
+          value: vnode.state.text,
+          onchange: e => vnode.state.text = e.currentTarget.value
+        })
+      ),
+      m("button.btn.btn-primary[type='button']", {onclick: vnode.state.submit.bind(vnode.state)}, "Submit")
+    );
+  }
 }
 
 var Main = {
@@ -70,8 +102,8 @@ var Main = {
       m(".row",
         m(".col-md-12", m(".page-header", m("h1", "Diggit")))
       ),
-      m(".row",
-        m(".col-md-3.col-md-offset-9", m("button.btn.btn-primary.btn-lg.pull-right.center-block[type=button][data-toggle=modal][data-target=#createTopicModal]", "Create Topic"))
+      m(".row", {style: "padding-bottom:15px;"},
+        m(".col-md-3.col-md-offset-9", m("button.btn.btn-primary.btn-lg.pull-right[type=button][data-toggle=modal][data-target=#createTopicModal]", "Create Topic"))
       ),
       m(".row",
         m(".col-md-12",
