@@ -17,37 +17,31 @@ module.exports = function() {
         });
     });
 
-    describe("insert", function() {
-        it("should insert element at index 0 for empty store", function() {
-            store.insert(1);
+    describe("insertItem", function() {
+        it("should insert element at index 0 for empty store", async function() {
+            await store.insertItem(1);
             assert.sameOrderedMembers(store._store, [1]);
         });
-        it("should insert and sort in ascending order", function() {
-            store.insert(4);
-            store.insert(1);
-            store.insert(2);
+        it("should insert and sort in ascending order", async function() {
+            await store.insertItem(4);
+            await store.insertItem(1);
+            await store.insertItem(2);
             assert.sameOrderedMembers(store._store, [1, 2, 4]);
-        });
-        it("should insert and sort in descending order", function() {
-            let descStore = new Store((a, b) => a - b, {isAscending: false});
-            descStore.insert(4);
-            descStore.insert(1);
-            descStore.insert(2);
-            assert.sameOrderedMembers(descStore._store, [4, 2, 1]);
         });
     });
 
     describe("getSlice", function() {
-        it("should return empty array if store is empty", function() {
-            let result = store.getSlice();
+        it("should return empty array if store is empty", async function() {
+            let result = await store.getSlice();
             assert.isArray(result);
             assert.lengthOf(result, 0);
         });
-        it("should return slice of items from start (including) to end (excluding)", function() {
-            store.insert(1);
-            store.insert(2);
-            store.insert(3);
-            assert.sameOrderedMembers(store.getSlice(0, 3), [1,2,3]);
+        it("should return slice of items from start (including) to end (excluding)", async function() {
+            await store.insertItem(1);
+            await store.insertItem(2);
+            await store.insertItem(3);
+            let result = await store.getSlice(0, 3);
+            assert.sameOrderedMembers(result, [1,2,3]);
         });
     });
 }
