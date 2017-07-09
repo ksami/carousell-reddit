@@ -5,22 +5,27 @@ var items = [
   {id: "3", author: "user3", votes: 300, text: "test post pls ignore three"},
 ];
 
-function clickHandler(id, action) {
-  // m.request({
-  //   method: "POST",
-  //   url: `/api/v1/topics/${id}/vote`,
-  //   data: {action: action}
-  // }).then(console.log);
-  console.log(id, "clicked", action);
+function request(action, data) {
+  const baseUrl = "/api/v1";
+  let opts = {};
+
+  switch(action) {
+    case "getList": opts = {method: "GET", url: `${baseUrl}/topics`}; break;
+    case "create": opts = {method: "POST", url: `${baseUrl}/topics/create`, data}; break;
+    case "upvote": opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
+    case "downvote": opts = {method: "POST", url: `${baseUrl}/topics/${data.id}/vote`, data}; break;
+  };
+
+  m.request(opts).then(console.log);
 }
 
 function makeList(items) {
-  return m(".list-group",
+  return m(".list-group", {oninit: ()=>request("getList")},
     items.map(item => m(".list-group-item", m(".row", [
       m(".col-md-1", {style: "display:block; text-align:center"}, [
-        m("a", {onclick: ()=>clickHandler(item.id, "up")}, m("i.text-center.glyphicon.glyphicon-triangle-top[aria-hidden=true]")),
+        m("a", {onclick: ()=>request("upvote", {id: item.id})}, m("i.text-center.glyphicon.glyphicon-triangle-top[aria-hidden=true]")),
         m("div", item.votes),
-        m("a", {onclick: ()=>clickHandler(item.id, "down")}, m("i.text-center.glyphicon.glyphicon-triangle-bottom[aria-hidden=true]"))
+        m("a", {onclick: ()=>request("downvote", {id: item.id})}, m("i.text-center.glyphicon.glyphicon-triangle-bottom[aria-hidden=true]"))
       ]),
       m(".col-md-11", [
         m("h4.list-group-item-heading", item.text),
