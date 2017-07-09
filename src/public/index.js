@@ -35,10 +35,44 @@ function makeList(items) {
   );
 }
 
+function makeModal() {
+  return m(".modal.fade[aria-labelledby='createTopicModalLabel'][id='createTopicModal'][role='dialog'][tabindex='-1']",
+    m(".modal-dialog[role='document']",
+      m(".modal-content",
+        m(".modal-header",
+          m("button.close[aria-label='Close'][data-dismiss='modal'][type='button']", 
+            m("span[aria-hidden='true']", 
+              m.trust("&times;")
+            )
+          ),
+          m("h4.modal-title[id='createTopicModalLabel']", 
+            "Create Topic"
+          )
+        ),
+        m(".modal-body", "//TODO"
+        ),
+        m(".modal-footer",
+          m("button.btn.btn-default[data-dismiss='modal'][type='button']", 
+            "Close"
+          ),
+          m("button.btn.btn-primary[type='button']", 
+            "Submit"
+          )
+        )
+      )
+    )
+  );
+}
+
 var Main = {
   view: function() {
-    return m(".container", [
-      m(".row", m(".col-md-3", m(".page-header", m("h1", "Diggit")))),
+    return m("div", makeModal(), m(".container", [
+      m(".row",
+        m(".col-md-12", m(".page-header", m("h1", "Diggit")))
+      ),
+      m(".row",
+        m(".col-md-3.col-md-offset-9", m("button.btn.btn-primary.btn-lg.pull-right.center-block[type=button][data-toggle=modal][data-target=#createTopicModal]", "Create Topic"))
+      ),
       m(".row",
         m(".col-md-12",
           m(".panel.panel-default", [
@@ -47,7 +81,7 @@ var Main = {
           ])
         )
       )
-    ]);
+    ]));
   }
 };
 
