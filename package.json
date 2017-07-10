@@ -28,10 +28,12 @@
     "@types/koa-send": "^3.3.0",
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.7",
+    "@types/sinon": "^2.3.2",
     "@types/uuid": "^3.0.0",
     "chai": "^4.0.2",
     "koa-send": "^4.1.0",
     "mocha": "^3.4.2",
+    "sinon": "^2.3.7",
     "ts-mocha": "^1.0.3"
   },
   "engines": {
