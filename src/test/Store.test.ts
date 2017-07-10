@@ -12,7 +12,7 @@ class ItemMock implements Identifier, Votable {
     }
 
     static comparator(a: ItemMock, b: ItemMock): number {
-        return a.val - b.val;
+        return b.val - a.val;
     }
 
     update(action: ACTION) {
@@ -26,8 +26,10 @@ class ItemMock implements Identifier, Votable {
 
 export default function() {
     let store: Store<ItemMock>;
+    let serialNumber: number;
     beforeEach(function() {
         store = new Store(ItemMock.comparator);
+        serialNumber = 0;
     });
 
     describe("Create", function() {
@@ -43,11 +45,12 @@ export default function() {
             let result = await store.getSlice();
             assert.sameDeepOrderedMembers(result, [new ItemMock("1", 1)]);
         });
-        it("should insert and sort in ascending order", async function() {
-            let arr = [4,1,2].map(val => new ItemMock(val.toString(), val));
+        it("should insert and sort in descending order", async function() {
+            let randomNums = Array(100).fill(0).map(() => Math.floor(Math.random() * 99));
+            let arr = randomNums.map(val => new ItemMock((serialNumber++).toString(), val));
             await Promise.all(arr.map(item => store.insertItem(item)));
             let result = await store.getSlice();
-            assert.sameOrderedMembers(result, arr.sort(ItemMock.comparator));
+            assert.sameOrderedMembers(result.map(r => r.val), arr.sort(ItemMock.comparator).map(s => s.val));
         });
     });
 
@@ -61,12 +64,13 @@ export default function() {
                 assert.isUndefined(e);
             }
         });
-        it("should update and sort in ascending order", async function() {
-            let arr = [3,1,4].map(val => new ItemMock(val.toString(), val));
+        it("should update and sort in descending order", async function() {
+            let randomNums = Array(100).fill(0).map(() => Math.floor(Math.random() * 99));
+            let arr = randomNums.map(val => new ItemMock((serialNumber++).toString(), val));
             await Promise.all(arr.map(item => store.insertItem(item)));
             await store.updateItemById("3", "downvote");
             let result = await store.getSlice();
-            assert.sameOrderedMembers(result, arr.sort(ItemMock.comparator));
+            assert.sameOrderedMembers(result.map(r => r.val), arr.sort(ItemMock.comparator).map(s => s.val));
         });
     });
 
@@ -77,10 +81,11 @@ export default function() {
             assert.lengthOf(result, 0);
         });
         it("should return slice of items from start (including) to end (excluding)", async function() {
-            let arr = [3,1,4,2].map(val => new ItemMock(val.toString(), val));
+            let randomNums = Array(100).fill(0).map(() => Math.floor(Math.random() * 99));
+            let arr = randomNums.map(val => new ItemMock((serialNumber++).toString(), val));
             await Promise.all(arr.map(item => store.insertItem(item)));
-            let result = await store.getSlice(0, 3);
-            assert.sameOrderedMembers(result, arr.sort(ItemMock.comparator).slice(0, 3));
+            let result = await store.getSlice(0, 20);
+            assert.sameOrderedMembers(result.map(r => r.val), arr.sort(ItemMock.comparator).slice(0, 20).map(s => s.val));
         });
     });
 }
