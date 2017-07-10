@@ -76,12 +76,16 @@ export default class Store<T extends Votable & Identifier> {
             item.update(action);
 
             // Swap updated item with its neighbours to maintain ordering in the store
-            if(action === "upvote" &&
-                idx > 0 && this._sortFn(this._store[idx-1], item) > 0) {
-                this._swap(idx-1, idx);
-            } else if(action === "downvote" &&
-                idx < this._store.length-1 && this._sortFn(item, this._store[idx+1]) > 0) {
-                this._swap(idx, idx+1);
+            if(action === "upvote") {
+                while(idx > 0 && this._sortFn(this._store[idx-1], item) > 0) {
+                    this._swap(idx-1, idx);
+                    idx--;
+                }
+            } else if(action === "downvote") {
+                while(idx < this._store.length-1 && this._sortFn(item, this._store[idx+1]) > 0) {
+                    this._swap(idx, idx+1);
+                    idx++;
+                }
             }
 
             return Promise.resolve(item);
