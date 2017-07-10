@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && cp -r src/docs bin && cp -r src/public bin",
     "start": "npm run build && node bin/index",
-    "test": "mocha test"
+    "test": "ts-mocha -p ./ src/test/**/*.test.ts"
   },
   "author": "ksami",
   "license": "ISC",
@@ -21,15 +21,18 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.1",
     "@types/koa": "^2.0.39",
     "@types/koa-bodyparser": "^3.0.23",
     "@types/koa-router": "^7.0.22",
     "@types/koa-send": "^3.3.0",
+    "@types/mocha": "^2.2.41",
     "@types/node": "^8.0.7",
     "@types/uuid": "^3.0.0",
     "chai": "^4.0.2",
     "koa-send": "^4.1.0",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "ts-mocha": "^1.0.3"
   },
   "engines": {
     "node": "7.10.0",
