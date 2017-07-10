@@ -49,9 +49,11 @@ paths:
             properties:
               text:
                 type: string
+                minLength: 1
                 maxLength: 255
               username:
                 type: string
+                minLength: 1
       responses:
         '200':
           description: List of top 20 topics sorted in descending order by upvotes
