@@ -43,7 +43,6 @@ app.use(logger());
 app.use(async (ctx, next) => {
     try {
         await next();
-        ctx.body.success = !(ctx.status === 400 || ctx.status === 500);
     } catch(e) {
         ctx.status = ctx.status || 500;
         ctx.body = {
