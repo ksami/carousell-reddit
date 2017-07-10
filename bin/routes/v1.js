@@ -6,15 +6,22 @@ let router = new Router();
 // Base path for routes below
 router.prefix("/v1");
 // Routes
-router.get("/topics", async (ctx) => {
+router.get("/topics", getTopics);
+router.post("/topics/create", createTopic);
+router.put("/topics/:id/vote", voteTopic);
+exports.default = router;
+// Controllers
+async function getTopics(ctx) {
     ctx.body = await ctx.store.getSlice(0, 20);
-});
-router.post("/topics/create", async (ctx) => {
+}
+exports.getTopics = getTopics;
+async function createTopic(ctx) {
     const newTopic = new models_1.Topic(ctx.request.body.text, ctx.request.body.username);
     await ctx.store.insertItem(newTopic);
     ctx.body = await ctx.store.getSlice(0, 20);
-});
-router.put("/topics/:id/vote", async (ctx) => {
+}
+exports.createTopic = createTopic;
+async function voteTopic(ctx) {
     const id = ctx.params.id;
     const action = ctx.request.body.action;
     try {
@@ -24,5 +31,5 @@ router.put("/topics/:id/vote", async (ctx) => {
     catch (e) {
         throw new Error("ID not found");
     }
-});
-exports.default = router;
+}
+exports.voteTopic = voteTopic;
