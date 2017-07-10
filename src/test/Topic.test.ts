@@ -52,4 +52,27 @@ export default function() {
             assert.propertyVal(result, "votes", up - down);
         });
     });
+
+    describe("comparator", function() {
+        it("should return 0 when both have same vote count", function() {
+            let a = new Topic();
+            let b = new Topic();
+            a.votes = b.votes = Math.floor(Math.random() * 9);
+            assert.equal(Topic.comparator(a, b), 0);
+        });
+        it("should return positive when b is greater than a", function() {
+            let a = new Topic();
+            let b = new Topic();
+            a.votes = b.votes = Math.floor(Math.random() * 9);
+            a.votes -= Math.floor(Math.random() * 9) + 1;
+            assert.isAbove(Topic.comparator(a, b), 0);
+        });
+        it("should return negative when b is less than a", function() {
+            let a = new Topic();
+            let b = new Topic();
+            a.votes = b.votes = Math.floor(Math.random() * 9);
+            a.votes += Math.floor(Math.random() * 9) + 1;
+            assert.isBelow(Topic.comparator(a, b), 0);
+        });
+    });
 }

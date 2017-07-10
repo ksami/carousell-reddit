@@ -23,7 +23,7 @@ class Topic {
      * @static
      * @param {Topic} a
      * @param {Topic} b
-     * @returns {number} negative for b before a and vice-versa, 0 for same ordering
+     * @returns {number} positive for b before a and vice-versa, 0 for same ordering
      * @memberof Topic
      */
     static comparator(a, b) {
