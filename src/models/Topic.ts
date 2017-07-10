@@ -1,7 +1,7 @@
 import * as uuid from "uuid/v4";
-import {Identifier, Mutable, ACTION} from "../libs";
+import {Identifier, Votable, ACTION} from "../libs";
 
-export default class Topic implements Identifier, Mutable {
+export default class Topic implements Identifier, Votable {
     readonly id: string
     readonly createdAt: number
     text: string

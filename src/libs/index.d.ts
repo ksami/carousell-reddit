@@ -17,6 +17,6 @@ export interface Identifier {
   id: string
 }
 
-export interface Mutable {
-  update(...a: any[]): void
+export interface Votable {
+  update(a: ACTION): void
 }

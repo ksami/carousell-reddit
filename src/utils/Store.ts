@@ -1,7 +1,7 @@
 import {Context} from "koa";
-import {Identifier, Mutable, ACTION} from "../libs";
+import {Identifier, Votable, ACTION} from "../libs";
 
-export default class Store<T extends Mutable & Identifier> {
+export default class Store<T extends Votable & Identifier> {
     private _store: T[]
     private _sortFn: (a: T, b: T) => number
 
