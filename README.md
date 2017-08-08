@@ -1,4 +1,4 @@
-# carousell-reddit
+# Diggit
 
 Clone of Reddit/Digg where users can create topics and vote on them.
 
